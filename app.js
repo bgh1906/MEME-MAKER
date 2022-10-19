@@ -15,3 +15,11 @@ ctx.rect(350, 350, 100, 100);
 ctx.rect(450, 450, 100, 100);
 ctx.fillStyle = "red";
 ctx.fill();
+
+// 브러쉬 이동 및 선 그리기
+ctx.moveTo(550, 550);
+ctx.lineTo(650, 550);
+ctx.lineTo(650, 650);
+ctx.lineTo(550, 650);
+ctx.lineTo(550, 550);
+ctx.fill();
