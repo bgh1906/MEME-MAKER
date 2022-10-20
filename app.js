@@ -2,6 +2,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 800;//캔버스 크기설정 js
 canvas.height = 800;//캔버스 크기설정 js
+ctx.lineWidth = 2;// 선 굵기 지정
 
 // // 사각형 추가
 // ctx.rect(50, 50, 100, 100);
@@ -59,34 +60,64 @@ canvas.height = 800;//캔버스 크기설정 js
 // 2.0
 // Painting Lines
 
-// 선 굵기 지정
-ctx.lineWidth = 2;
+// // 색상 배열
+// const colors = [
+//     "#ff3838",
+//     "#ffb8b8",
+//     "#c56cf0",
+//     "#ff9f1a",
+//     "#fff200",
+//     "#32ff7e",
+//     "#7efff5",
+//     "#18dcff",
+//     "#7d5fff",
+//   ];
 
-// 색상 배열
-const colors = [
-    "#ff3838",
-    "#ffb8b8",
-    "#c56cf0",
-    "#ff9f1a",
-    "#fff200",
-    "#32ff7e",
-    "#7efff5",
-    "#18dcff",
-    "#7d5fff",
-  ];
+// function onClick(event) { // onClick 이벤트 선언
+//     console.log(event);// event에 대한 정보 콘솔출력
+//     ctx.beginPath();
+//     ctx.moveTo(0, 0);// 선 시작경로
+//     const color = colors[Math.floor(Math.random() * colors.length)];// 랜덤으로 선 색상 선택
+//     ctx.strokeStyle = color;// 현재 ctx 색상을 위의 랜덤값으로 변경
+//     ctx.lineTo(event.offsetX, event.offsetY);// 현재 마우스좌표
+//     ctx.stroke();// 선 그리기
+// }
 
-function onClick(event) { // onClick 이벤트 선언
-    console.log(event);// event에 대한 정보 콘솔출력
-    ctx.beginPath();
-    ctx.moveTo(0, 0);// 선 시작경로
-    const color = colors[Math.floor(Math.random() * colors.length)];// 랜덤으로 선 색상 선택
-    ctx.strokeStyle = color;// 현재 ctx 색상을 위의 랜덤값으로 변경
-    ctx.lineTo(event.offsetX, event.offsetY);// 현재 마우스좌표
-    ctx.stroke();// 선 그리기
+// // 마우스 클릭시 onClick 이벤트 발생
+// // canvas.addEventListener("click", onClick);
+// // 마우스 이동시 onClick 이벤트 발생
+// canvas.addEventListener("mousemove", onClick);
+
+
+// 2.1
+// Mouse Painting
+// 변수선언
+let isPainting = false;
+
+// 마우스 이동시 이벤트 발생
+function onMove(event) {
+        console.log(event);// event에 대한 정보 콘솔출력
+    if (isPainting) {
+        ctx.lineTo(event.offsetX, event.offsetY) // 마우스 좌표로부터 선 그리기
+        // ctx.stroke(); // 선 그리기
+        ctx.fill();// 도형 그리기
+        return;
+    }
+    ctx.moveTo(event.offsetX, event.offsetY);
 }
 
-// 마우스 클릭시 onClick 이벤트 발생
-// canvas.addEventListener("click", onClick);
-// 마우스 이동시 onClick 이벤트 발생
-canvas.addEventListener("mousemove", onClick);
+// 마우스 버튼이 내려갈때 발생하는 이벤트
+function startPainting(event) {
+    isPainting = true;// 마우스 이동 이벤트에서 if문을 작동시키기위한 변수 변경
+}
 
+// 마우스 버튼이 올라갈때 발생하는 이벤트
+function cancelPainting(event) {
+    isPainting = false;// 마우스 이동 이벤트에서 if문을 작동시키지 않기위한 변수 변경
+}
+
+// 이벤트 리스너 입력
+canvas.addEventListener("mousemove", onMove);
+canvas.addEventListener("mousedown", startPainting);
+canvas.addEventListener("mouseup", cancelPainting);
+canvas.addEventListener("mouseleave", cancelPainting);// 마우스가 캔버스를 떠나는경우 처리
