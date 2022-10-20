@@ -1,8 +1,10 @@
+const lineWidth = document.getElementById("line-width");// index.html에서 선언한 id가 line-width인 태그를 lineWidth와 연결
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
+
 canvas.width = 800;//캔버스 크기설정 js
 canvas.height = 800;//캔버스 크기설정 js
-ctx.lineWidth = 2;// 선 굵기 지정
+ctx.lineWidth = lineWidth.value;// lineWidth.value의 초기값으로 선 굵기 지정
 
 // // 사각형 추가
 // ctx.rect(50, 50, 100, 100);
@@ -99,8 +101,8 @@ function onMove(event) {
         console.log(event);// event에 대한 정보 콘솔출력
     if (isPainting) {
         ctx.lineTo(event.offsetX, event.offsetY) // 마우스 좌표로부터 선 그리기
-        // ctx.stroke(); // 선 그리기
-        ctx.fill();// 도형 그리기
+        ctx.stroke(); // 선 그리기
+        // ctx.fill();// 도형 그리기
         return;
     }
     ctx.moveTo(event.offsetX, event.offsetY);
@@ -114,6 +116,14 @@ function startPainting(event) {
 // 마우스 버튼이 올라갈때 발생하는 이벤트
 function cancelPainting(event) {
     isPainting = false;// 마우스 이동 이벤트에서 if문을 작동시키지 않기위한 변수 변경
+    ctx.beginPath();// 기존 선에 영향을 받지 않도록 새로 시작해주기
+}
+
+// 선 굵기를 변경하는 이벤트
+function onLineWidthChange(event) {
+    console.log(event);
+    console.log(event.target.value);
+    ctx.lineWidth = event.target.value;
 }
 
 // 이벤트 리스너 입력
@@ -121,3 +131,5 @@ canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
 canvas.addEventListener("mouseleave", cancelPainting);// 마우스가 캔버스를 떠나는경우 처리
+
+lineWidth.addEventListener("change", onLineWidthChange)// 상단에서 선언한 lineWidth의 이벤트 리스너 변화가 감지되는경우 onLineWidthChange 이벤트 발생
